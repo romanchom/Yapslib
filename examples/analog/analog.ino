@@ -1,3 +1,4 @@
+/*
 MIT License
 
 Copyright (c) 2016 Roman Chomik romanchom@gmail.com
@@ -19,3 +20,48 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+#include "SPI.h"
+#include "Yaps.h"
+
+enum {
+	pinCSN = 10,
+	pinMOSI = 11,
+	pinMISO = 12,
+	pinSCK = 14,
+};
+
+Yaps pad(pinCSN);
+
+void setup() {
+	SPI.setSCK(pinSCK);
+	SPI.setMOSI(pinMOSI);
+	SPI.setMISO(pinMISO);
+	SPI.begin();
+}
+
+void loop() {
+	
+	pad.read();
+	
+	if(pad.isAnalog()){
+		Serial.print(pad.getStickFloat(Yaps::STICK_LEFT | Yaps::AXIS_X));
+		Serial.print("\t");
+		
+		Serial.print(pad.getStickFloat(Yaps::STICK_LEFT | Yaps::AXIS_Y));
+		Serial.print("\t");
+		
+		Serial.print(pad.getStickFloat(Yaps::STICK_RIGHT | Yaps::AXIS_X));
+		Serial.print("\t");
+		
+		Serial.print(pad.getStickFloat(Yaps::STICK_RIGHT | Yaps::AXIS_Y));
+		Serial.print("\t");
+	}else{
+		Serial.print("Not an analog pad");
+	}
+	
+	Serial.println();
+	
+	
+	delay(100);
+}
