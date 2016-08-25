@@ -28,7 +28,7 @@ Yaps::Yaps(int pinCSN, uint32_t clockFrequency, uint32_t delayUs) :
 	mButtonsState(0),
 	mPinCSN(pinCSN),
 	mIsAnalog(false),
-	mSpiSettings(clockFrequency, LSBFIRST, SPI_MODE3)
+	mSpiSettings(clockFrequency, LSBFIRST, SPI_MODE0)
 {
 	// set pin as output and drive it high
 	// pin is active low
