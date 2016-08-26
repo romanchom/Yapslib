@@ -52,7 +52,7 @@ public:
 	// to check if a button is pressed test it with a flag or multiple flags
 	// e.g. bool crossPressed = (yaps.getButtons() & yaps.BUTTON_CROSS) != 0;
 	uint16_t getButtons(){ return mButtonsState; }
-	
+
 	// helper functions, pass button flags as argument
 	bool isDown(uint16_t mask){
 		return (mButtonsState & mask) != 0;
@@ -67,29 +67,29 @@ public:
 	int8_t getStick(int index){ return mSticks[index]; }
 	// returns analog stick state as floating point number in <-1, 1) range
 	float getStickFloat(int index){ return mSticks[index] / 128.0f; }
-	
+
 	// flags used with getButtons(), isDown(), isUp(), getStick(), getStickFloat()
 	enum {
 		BUTTON_SELECT = 0x0001,
-		BUTTON_STICKRIGHT = 0x0002,
-		BUTTON_STICKLEFT = 0x0004,
+		BUTTON_STICKLEFT = 0x0002,
+		BUTTON_STICKRIGHT = 0x0004,
 		BUTTON_START = 0x0008,
-		
+
 		BUTTON_UP = 0x0010,
 		BUTTON_RIGHT = 0x0020,
 		BUTTON_DOWN = 0x0040,
 		BUTTON_LEFT = 0x0080,
-		
+
 		BUTTON_L2 = 0x0100,
 		BUTTON_R2 = 0x0200,
 		BUTTON_L1 = 0x0400,
 		BUTTON_R1 = 0x0800,
-		
+
 		BUTTON_TRIANGLE = 0x1000,
 		BUTTON_CIRCLE = 0x2000,
 		BUTTON_CROSS = 0x4000,
 		BUTTON_SQUARE = 0x8000,
-		
+
 		STICK_RIGHT = 0x0,
 		STICK_LEFT = 0x2,
 		AXIS_X = 0x0,
