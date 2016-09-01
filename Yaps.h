@@ -35,6 +35,7 @@ private:
 	uint32_t mDelay;
 	// buttons state in a bit field
 	uint16_t mButtonsState;
+	uint16_t mPreviousButtonsState;
 	// pin number of active low chip select line
 	uint8_t mPinCSN;
 	// whether current controller is is in analog mode
@@ -60,6 +61,14 @@ public:
 	// helper functions, pass button flags as argument
 	bool isUp(uint16_t mask){
 		return (mButtonsState & mask) == 0;
+	}
+	// returns whether given button is just pressed, e.g. was up, now is down
+	bool isPressed(uint16_t mask){
+		return (~mPreviousButtonsState & mButtonsState & mask) != 0;
+	}
+	// returns whether given button is just released, e.g. was dows, now is up
+	bool isReleased(uint16_t mask){
+		return (mPreviousButtonsState & ~mButtonsState & mask) != 0;
 	}
 	// returns analog stick state as signed integer
 	// pass a combination of flags as parameter or use integer indicies

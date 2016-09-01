@@ -23,9 +23,10 @@ SOFTWARE.
 */
 #include "Yaps.h"
 
-Yaps::Yaps(int pinCSN, uint32_t clockFrequency, uint32_t delayUs) : 
+Yaps::Yaps(int pinCSN, uint32_t clockFrequency, uint32_t delayUs) :
 	mDelay(delayUs),
 	mButtonsState(0),
+	mPreviousButtonsState(0),
 	mPinCSN(pinCSN),
 	mIsAnalog(false),
 	mSpiSettings(clockFrequency, LSBFIRST, SPI_MODE0)
@@ -38,32 +39,33 @@ Yaps::Yaps(int pinCSN, uint32_t clockFrequency, uint32_t delayUs) :
 
 void Yaps::read(){
 	uint8_t response;
+	mPreviousButtonsState = mButtonsState;
 	mButtonsState = 0;
-	
+
 	SPI.beginTransaction(mSpiSettings);
 	digitalWrite(mPinCSN, 0);
 	delayMicroseconds(mDelay);
 
 	SPI.transfer(0x01);
 	delayMicroseconds(mDelay);
-	
+
 	response = SPI.transfer(0x42);
 	delayMicroseconds(mDelay);
 	mIsAnalog = (response == 0x73);
-	
+
 	SPI.transfer(0xFF);
 	delayMicroseconds(mDelay);
-	
+
 	response = SPI.transfer(0xFF);
 	delayMicroseconds(mDelay);
 	response = ~response;
 	mButtonsState |= static_cast<uint16_t>(response);
-	
+
 	response = SPI.transfer(0xFF);
 	delayMicroseconds(mDelay);
 	response = ~response;
 	mButtonsState |= (static_cast<uint16_t>(response) << 8);
-	
+
 	if(mIsAnalog){
 		for(int i = 0; i < 4; ++i){
 			response = SPI.transfer(0xFF);
@@ -71,7 +73,7 @@ void Yaps::read(){
 			mSticks[i] = reinterpret_cast<int8_t &>(response) + 128;
 		}
 	}
-	
+
 	digitalWrite(mPinCSN, 1);
 	SPI.endTransaction();
 }
